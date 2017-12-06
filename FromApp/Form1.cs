@@ -23,19 +23,16 @@ namespace FromApp
 
         private void btnEkle_Click(object sender, EventArgs e)
         {
-            if(progressBar1.Value < 5)
+            if (progressBar1.Value < 5)
             {
                 MessageBox.Show("Bütün alanları doldurmalısınız.");
                 return;
             }
 
-            var li = new ListViewItem(new[] { "",txtAd.Text, txtSoyad.Text, txtKimlikNo.Text, txtUzmanlik.Text });
-
-            imageList2.Images.Add(pictureBox1.Image);
-
-            li.ImageIndex = imageList2.Images.Count - 1;
-
-
+            var li = new ListViewItem(new[] { "Deneme", txtAd.Text, txtSoyad.Text, txtKimlikNo.Text, txtUzmanlik.Text });
+            li.ImageKey = RandomKey();
+            imageList2.Images.Add(li.ImageKey, pictureBox1.Image);
+            
             if (isUpdate)
             {
                 //var li2 = listView1.SelectedItems[0];
@@ -166,7 +163,7 @@ namespace FromApp
         {
             var kisi = ((ListBox)sender).SelectedItem as Kisi;
 
-            if(kisi is null)
+            if (kisi is null)
             {
                 return;
             }
@@ -179,7 +176,7 @@ namespace FromApp
             chkAktif.Checked = kisi.IsActive;
 
 
-            if(kisi.Cinsiyet == Cinsiyet.Kadın)
+            if (kisi.Cinsiyet == Cinsiyet.Kadın)
             {
                 rdbCinsiyetKadin.Checked = true;
             }
@@ -187,7 +184,7 @@ namespace FromApp
             {
                 rdbCinsiyetErkek.Checked = true;
             }
-            else if(kisi.Cinsiyet == Cinsiyet.Diger)
+            else if (kisi.Cinsiyet == Cinsiyet.Diger)
             {
                 rbDiger.Checked = true;
             }
@@ -212,7 +209,7 @@ namespace FromApp
             txtKimlikNo.Text = selectedItem.SubItems[3].Text;
             txtUzmanlik.Text = selectedItem.SubItems[4].Text;
 
-            pictureBox1.Image = imageList2.Images[selectedItem.ImageIndex];
+            pictureBox1.Image = imageList2.Images[selectedItem.ImageKey];
 
             isUpdate = true;
             selectedRowIndex = lv.SelectedIndices[0];
@@ -262,6 +259,19 @@ namespace FromApp
         private void txtAd_Leave(object sender, EventArgs e)
         {
             ProgresbarHesapla();
+        }
+
+        Random rnd = new Random();
+        private string RandomKey()
+        {
+            string resimKey = null;
+
+            for (int i = 0; i < 3; i++)
+            {
+                resimKey += ((char)rnd.Next(0, 65537)).ToString();
+            }
+
+            return resimKey;
         }
     }
 }
