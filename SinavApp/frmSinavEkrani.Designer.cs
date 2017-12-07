@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.lblSinavAdi = new System.Windows.Forms.Label();
             this.lblSinavAciklama = new System.Windows.Forms.Label();
             this.prgCevapOrani = new System.Windows.Forms.ProgressBar();
             this.pnlSorular = new System.Windows.Forms.Panel();
             this.lblKalanZaman = new System.Windows.Forms.Label();
             this.lblAdSoyad = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // lblSinavAdi
@@ -91,6 +93,11 @@
             this.lblAdSoyad.Text = "Ad Soyad";
             this.lblAdSoyad.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 1;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // frmSinavEkrani
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -118,5 +125,6 @@
         private System.Windows.Forms.Panel pnlSorular;
         private System.Windows.Forms.Label lblKalanZaman;
         public System.Windows.Forms.Label lblAdSoyad;
+        private System.Windows.Forms.Timer timer1;
     }
 }

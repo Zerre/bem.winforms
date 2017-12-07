@@ -49,6 +49,7 @@ namespace SinavApp
         private void btnSinavSec_Click(object sender, EventArgs e)
         {
             openFileDialog1.ShowDialog();
+            openFileDialog1.InitialDirectory = @"C:\Users\Sami\Documents\Visual Studio 2017\Projects\Github Projects\bem.winforms\SinavApp\Sinavlar";
             lblSinavDosyaYolu.Text = openFileDialog1.FileName;
         }
 
