@@ -42,7 +42,7 @@ namespace SinavApp
                 kalanZaman = Convert.ToInt32(streamReader.ReadLine());
             }
             lblKalanZaman.Text = ZamanHesapla(kalanZaman);
-            sonDakikalar = kalanZaman / 100 * 10;
+            sonDakikalar = (kalanZaman / 100) * 10;
             timer1.Start();
         }
 
