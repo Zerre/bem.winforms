@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -78,212 +79,97 @@ Etiam sed accumsan risus, vitae gravida ex. Donec ex risus, mollis quis pulvinar
             }
         }
 
-        private void yesilToolStripMenuItem_Click(object sender, EventArgs e)
+        private void kalınToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            richTextBox1.SelectionColor = Color.Green;
-            yesilToolStripMenuItem.Checked = !yesilToolStripMenuItem.Checked;
+            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont, richTextBox1.SelectionFont.Style ^ FontStyle.Bold);
         }
 
-        private void maviToolStripMenuItem_Click(object sender, EventArgs e)
+        private void cmenuStyle_Opened(object sender, EventArgs e)
         {
-            richTextBox1.SelectionColor = Color.Blue;
-            maviToolStripMenuItem.Checked = !maviToolStripMenuItem.Checked;
+            kalınToolStripMenuItem.Checked = richTextBox1.SelectionFont.Bold;
+            italikToolStripMenuItem.Checked = richTextBox1.SelectionFont.Italic;
+            altçizgiliToolStripMenuItem.Checked = richTextBox1.SelectionFont.Underline;
         }
 
-        private void kirmiziToolStripMenuItem_Click(object sender, EventArgs e)
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
-            richTextBox1.SelectionColor = Color.Red;
-
+            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, 8);
         }
 
-        private void digerRenkToolStripMenuItem_Click(object sender, EventArgs e)
+        private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            colorDialog1.ShowDialog();
-            richTextBox1.SelectionColor = colorDialog1.Color;
+            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, 10);
         }
 
-        Font font;
-        bool fontVarMi = false;
-        Font fontEkleCikar(int size)
+        private void toolStripMenuItem4_Click(object sender, EventArgs e)
         {
-            //bool bold = richTextBox1.SelectionFont.Bold;
-            //bool italic = richTextBox1.SelectionFont.Italic;
-            //bool underline = richTextBox1.SelectionFont.Underline;
-
-            if (kalinYazi && italicYazi && altCizgiliYazi)
-            {
-                font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline);
-                fontVarMi = true;
-                kalinToolStripMenuItem.Checked = true;
-                italikToolStripMenuItem.Checked = true;
-                altcizgiliToolStripMenuItem.Checked = true;
-                return font;
-            }
-
-            if (kalinYazi && !kalinToolStripMenuItem.Checked)
-            {
-                kalinToolStripMenuItem.Checked = true;
-
-                if (italicYazi && altCizgiliYazi)
-                {
-                    font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline);
-                }
-                else if (altCizgiliYazi)
-                {
-                    font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Bold | FontStyle.Underline);
-                }
-                else if (italicYazi)
-                {
-                    font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Bold | FontStyle.Italic);
-                }
-                else
-                {
-                    font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Bold);
-                }
-                fontVarMi = true;
-                return font;
-            }
-
-            if (italicYazi && !italikToolStripMenuItem.Checked)
-            {
-                italikToolStripMenuItem.Checked = true;
-                if (kalinYazi && altCizgiliYazi)
-                {
-                    font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline);
-                }
-                else if (altCizgiliYazi)
-                {
-                    font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Italic | FontStyle.Underline);
-                }
-                else if (kalinYazi)
-                {
-                    font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Bold | FontStyle.Italic);
-                }
-                else
-                {
-                    font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Italic);
-                }
-                fontVarMi = true;
-                return font;
-            }
-
-            if (altCizgiliYazi && !altcizgiliToolStripMenuItem.Checked)
-            {
-                altcizgiliToolStripMenuItem.Checked = true;
-                if (kalinYazi && italicYazi)
-                {
-                    font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Bold | FontStyle.Underline | FontStyle.Italic);
-                }
-                else if (kalinYazi)
-                {
-                    font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Bold | FontStyle.Underline);
-                }
-                else if (italicYazi)
-                {
-                    font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Italic | FontStyle.Underline);
-                }
-                else
-                {
-                    font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Underline);
-                }
-                fontVarMi = true;
-                return font;
-            }
-
-            if (!kalinYazi && !italicYazi && !altCizgiliYazi)
-            {
-                fontVarMi = false;
-                font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Regular);
-                kalinToolStripMenuItem.Checked = false;
-                italikToolStripMenuItem.Checked = false;
-                altcizgiliToolStripMenuItem.Checked = false;
-            }
-            else if (!kalinYazi && !italicYazi)
-            {
-                font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Underline);
-                kalinToolStripMenuItem.Checked = false;
-                italikToolStripMenuItem.Checked = false;
-            }
-            else if (!kalinYazi && !altCizgiliYazi)
-            {
-                font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Italic);
-                kalinToolStripMenuItem.Checked = false;
-                altcizgiliToolStripMenuItem.Checked = false;
-            }
-            else if (!altCizgiliYazi && !italicYazi)
-            {
-                font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Bold);
-                altcizgiliToolStripMenuItem.Checked = false;
-                italikToolStripMenuItem.Checked = false;
-            }
-            else if (!kalinYazi)
-            {
-                font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Italic | FontStyle.Underline);
-                kalinToolStripMenuItem.Checked = false;
-            }
-            else if (!italicYazi)
-            {
-                font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Bold | FontStyle.Underline);
-                kalinToolStripMenuItem.Checked = false;
-                italikToolStripMenuItem.Checked = false;
-            }
-            else if (!altCizgiliYazi)
-            {
-                font = new Font(richTextBox1.Font.FontFamily, size, FontStyle.Bold | FontStyle.Italic);
-                kalinToolStripMenuItem.Checked = false;
-                altcizgiliToolStripMenuItem.Checked = false;
-            }
-
-            return font;
+            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, 12);
         }
 
-        int YaziBoyutu = 8;
-        bool kalinYazi = false;
-        private void kalinToolStripMenuItem_Click(object sender, EventArgs e)
+        private void toolStripTextBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            kalinYazi = !kalinYazi;
-            richTextBox1.SelectionFont = fontEkleCikar(YaziBoyutu);
+            if(e.KeyChar == 13)
+            {
+                richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, float.Parse(((ToolStripTextBox)sender).Text));
+            }
         }
 
-        bool italicYazi = false;
+        private void toolStripTextBox1_Leave(object sender, EventArgs e)
+        {
+            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, float.Parse(((ToolStripTextBox)sender).Text));
+        }
+
+        private void cmenuStyle_Closed(object sender, ToolStripDropDownClosedEventArgs e)
+        {
+            if(string.IsNullOrWhiteSpace(toolStripTextBox1.Text))
+            {
+                return;
+            }
+
+            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, float.Parse(toolStripTextBox1.Text));
+        }
+
         private void italikToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            italicYazi = !italicYazi;
-            richTextBox1.SelectionFont = fontEkleCikar(YaziBoyutu);
+            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont, richTextBox1.SelectionFont.Style ^ FontStyle.Italic);
         }
 
-        bool altCizgiliYazi = false;
-        private void altcizgiliToolStripMenuItem_Click(object sender, EventArgs e)
+        private void altçizgiliToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            altCizgiliYazi = !altCizgiliYazi;
-            richTextBox1.SelectionFont = fontEkleCikar(YaziBoyutu);
+            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont, richTextBox1.SelectionFont.Style ^ FontStyle.Underline);
         }
 
-        private void size8toolStripMenuItem_Click(object sender, EventArgs e)
+        private void kesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            YaziBoyutu = Convert.ToInt32(size8toolStripMenuItem.Text);
-            richTextBox1.SelectionFont = fontEkleCikar(YaziBoyutu);
+            richTextBox1.Cut();
         }
 
-        private void size10toolStripMenuItem_Click(object sender, EventArgs e)
+        private void kopyalaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            YaziBoyutu = Convert.ToInt32(size10toolStripMenuItem.Text);
-            richTextBox1.SelectionFont = fontEkleCikar(YaziBoyutu);
+            richTextBox1.Copy();
         }
 
-        private void size12toolStripMenuItem_Click(object sender, EventArgs e)
+        private void yapıştırToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            YaziBoyutu = Convert.ToInt32(size12toolStripMenuItem.Text);
-            richTextBox1.SelectionFont = fontEkleCikar(YaziBoyutu);
+            richTextBox1.Paste();
         }
 
-        private void sizeDigertoolStripTxt_KeyPress(object sender, KeyPressEventArgs e)
+        private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            if (Convert.ToInt32(e.KeyChar) == 13)
-            {
-                YaziBoyutu = Convert.ToInt32(sizeDigertoolStripTxt.Text);
-                richTextBox1.SelectionFont = fontEkleCikar(YaziBoyutu);
-            }
+            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, (sender as TrackBar).Value);
+        }
+
+        private void RenkSec()
+        {
+            var color =Color.FromArgb(trackBar2.Value, trackBar3.Value, trackBar4.Value);
+
+            richTextBox1.SelectionColor = color;
+
+        }
+
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            RenkSec();
         }
     }
 }

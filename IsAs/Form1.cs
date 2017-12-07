@@ -15,6 +15,14 @@ namespace IsAs
         public Form1()
         {
             InitializeComponent();
+
+            for (int i = 0; i < 50; i++)
+            {
+                var button = new Button();
+                button.Size = new Size(40, 20);
+
+                flowLayoutPanel1.Controls.Add(button);
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -40,7 +48,7 @@ namespace IsAs
             object b2 = button1 as Button;
 
             ListBox l1 = b2 as ListBox;
-            ListBox l2 = (ListBox)b2;
+            //ListBox l2 = (ListBox)b2;
             listBox2.Items.Add(l1 is null);
 
             Button b3 = b2 as Button;
