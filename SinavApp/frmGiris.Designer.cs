@@ -55,6 +55,7 @@
             this.txtAdSoyad.Name = "txtAdSoyad";
             this.txtAdSoyad.Size = new System.Drawing.Size(100, 20);
             this.txtAdSoyad.TabIndex = 3;
+            this.txtAdSoyad.Text = "Cumali";
             // 
             // btnSinavSec
             // 

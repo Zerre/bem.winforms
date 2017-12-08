@@ -67,6 +67,8 @@
             // 
             // pnlSorular
             // 
+            this.pnlSorular.AutoScroll = true;
+            this.pnlSorular.AutoSize = true;
             this.pnlSorular.Location = new System.Drawing.Point(12, 204);
             this.pnlSorular.Name = "pnlSorular";
             this.pnlSorular.Size = new System.Drawing.Size(561, 241);
@@ -102,6 +104,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(585, 457);
             this.Controls.Add(this.lblAdSoyad);
             this.Controls.Add(this.lblKalanZaman);
