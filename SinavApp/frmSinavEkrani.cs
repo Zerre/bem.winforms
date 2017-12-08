@@ -15,7 +15,8 @@ namespace SinavApp
     {
         public string AdSoyad { get; set; }
         public string SinavDosyaYolu { get; set; }
-        int kalanZaman, sonDakikalar;
+        public TimeSpan SinavSüresi { get; private set; }
+        public double SinavSüresiYüzdeOn { get; private set; }
 
         public frmSinavEkrani()
         {
@@ -32,7 +33,6 @@ namespace SinavApp
             SinavDosyaYolu = sinavDosyaYolu;
         }
 
-
         private void frmSinavEkrani_Load(object sender, EventArgs e)
         {
             int soruSayisi = 0;
@@ -41,87 +41,82 @@ namespace SinavApp
             {
                 lblSinavAdi.Text = streamReader.ReadLine();
                 lblSinavAciklama.Text = streamReader.ReadLine();
-                kalanZaman = Convert.ToInt32(streamReader.ReadLine());
+                SinavSüresi = TimeSpan.FromSeconds(int.Parse(streamReader.ReadLine()));
+                SinavSüresiYüzdeOn = SinavSüresi.TotalSeconds * 0.1;
 
-                while (true)
+                string line = "";
+
+                int soruSayisi = 0;
+                int top = -350;
+                int left = 0;
+
+                while (!string.IsNullOrWhiteSpace((line = streamReader.ReadLine())))
                 {
-                    string satir = streamReader.ReadLine();
-                    if (string.IsNullOrWhiteSpace(satir))
-                    {
-                        break;
-                    }
-                    string[] soruVeSecenekler = satir.Split('|');
-                    GroupBox grpSoru = new GroupBox();
-                    grpSoru.Text = soruSayisi + 1 + ". SORU";
-                    grpSoru.Size = new Size(250, 250);
-                    grpSoru.Name = "grp" + soruSayisi;
+                    soruSayisi++;
+                    var items = line.Split('|');
 
-                    Label lblSoru = new Label();
-                    lblSoru.Name = "lbl" + soruSayisi;
-                    lblSoru.AutoSize = true;
-                    lblSoru.MaximumSize = new Size(240, 0);
-                    if (soruSayisi % 2 == 0)
-                    {
-                        grpSoru.Location = new Point(0, solY);
-                        solY += grpSoru.Height + 5;
-                        lblSoru.Location = new Point(30, 30);
-                        //solY += lblSoru.Height + 25;
-                    }
-                    else
-                    {
-                        grpSoru.Location = new Point(300, sagY);
-                        sagY += grpSoru.Height + 5;
-                        lblSoru.Location = new Point(30, 30);
-                        //sagY += lblSoru.Height + 5;
-                    }
+                    top += (soruSayisi % 2 == 1) ? 350 : 0;
+                    left = (soruSayisi % 2 == 1) ? 0 : 286;
 
-                    lblSoru.Text = soruVeSecenekler[0];
-                    grpSoru.Controls.Add(lblSoru);
-                    for (int i = 1; i < soruVeSecenekler.Length - 1; i++)
+                    var groupBox = new GroupBox
                     {
-                        RadioButton rdbSecenek = new RadioButton()
+                        Location = new Point(left, top),
+                        Size = new Size(275, 300),
+                        Text = $"{soruSayisi}. Soru"
+                    };
+
+                    var lbl = new Label
+                    {
+                        Text = items[0],
+                        MaximumSize = new Size(260, 0),
+                        AutoSize = true,
+                        Location = new Point(15, 15)
+                    };
+
+                    int radioTop = lbl.Location.Y+ lbl.PreferredHeight +15;
+
+                    for (int i = 1; i < items.Length-1; i++)
+                    {
+                        var radio = new RadioButton
                         {
-                            Name = soruSayisi + "soru" + i,
-                            Text = soruVeSecenekler[i],
-                            Tag = soruSayisi + "-" + i,
-                        Location = new Point(25, i * lblSoru.Top + lblSoru.Height + 5)
+                            Text = items[i],
+                            Location = new Point(20, radioTop),
+                            Enabled = false,
+                            AutoSize = true,
+                            MaximumSize = new Size(200,0)
                         };
-                    grpSoru.Controls.Add(rdbSecenek);
-                }
-                pnlSorular.Controls.Add(grpSoru);
-                soruSayisi++;
+
+                        groupBox.Controls.Add(radio);
+
+                        radioTop += 30;
+                    }
+
+                    groupBox.Controls.Add(lbl);
+
+                    pnlSorular.Controls.Add(groupBox);
+
+                };
+
+
+                //timer1.Interval = 1;
             }
-            prgCevapOrani.Maximum = soruSayisi + 3;
-        }
-        lblKalanZaman.Text = ZamanHesapla(kalanZaman);
-        sonDakikalar = (kalanZaman / 100) * 10;
+
             timer1.Start();
         }
 
-    string zamanFormatla(int birim)
-    {
-        return birim < 10 ? "0" + birim : birim + "";
-    }
-    string ZamanHesapla(int zaman)
-    {
-        int saat = zaman / 3600;
-        int dakika = (zaman % 3600) / 60;
-        int saniye = (zaman % 3600) % 60;
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (SinavSüresi.TotalSeconds == 0)
+            {
+                timer1.Stop();
+            }
+            this.lblKalanZaman.Text = SinavSüresi.ToString(@"hh\:mm\:ss");
 
-        return zamanFormatla(saat) + ":" + zamanFormatla(dakika) + ":" + zamanFormatla(saniye);
-    }
-    private void timer1_Tick(object sender, EventArgs e)
-    {
-        kalanZaman--;
-        lblKalanZaman.Text = ZamanHesapla(kalanZaman);
-        if (kalanZaman <= sonDakikalar)
-        {
-            lblKalanZaman.ForeColor = Color.Red;
-        }
-        if (kalanZaman <= 0)
-        {
-            timer1.Stop();
+            if (SinavSüresi.TotalSeconds <= SinavSüresiYüzdeOn)
+            {
+                lblKalanZaman.ForeColor = Color.Red;
+            }
+            SinavSüresi = TimeSpan.FromSeconds(SinavSüresi.TotalSeconds - 1);
         }
     }
-}
 }

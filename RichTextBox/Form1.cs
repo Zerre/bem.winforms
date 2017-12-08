@@ -81,7 +81,18 @@ Etiam sed accumsan risus, vitae gravida ex. Donec ex risus, mollis quis pulvinar
 
         private void kalınToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont, richTextBox1.SelectionFont.Style ^ FontStyle.Bold);
+
+            var selectionStart = richTextBox1.SelectionStart;
+            var selectionEnd = richTextBox1.SelectionStart+ richTextBox1.SelectionLength;
+
+            for (int i = selectionStart; i < selectionEnd; i++)
+            {
+                richTextBox1.SelectionStart = i;
+                richTextBox1.SelectionLength = 1;
+                richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont, richTextBox1.SelectionFont.Style ^ FontStyle.Bold);
+            }
+
+            //richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont, richTextBox1.SelectionFont.Style ^ FontStyle.Bold);
         }
 
         private void cmenuStyle_Opened(object sender, EventArgs e)
@@ -131,12 +142,29 @@ Etiam sed accumsan risus, vitae gravida ex. Donec ex risus, mollis quis pulvinar
 
         private void italikToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont, richTextBox1.SelectionFont.Style ^ FontStyle.Italic);
+
+            var selectionStart = richTextBox1.SelectionStart;
+            var selectionEnd = richTextBox1.SelectionStart + richTextBox1.SelectionLength;
+            for (int i = selectionStart; i < selectionEnd; i++)
+            {
+                richTextBox1.SelectionStart = i;
+                richTextBox1.SelectionLength = 1;
+                richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont, richTextBox1.SelectionFont.Style ^ FontStyle.Italic);
+            }
+            
         }
 
         private void altçizgiliToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont, richTextBox1.SelectionFont.Style ^ FontStyle.Underline);
+            var selectionStart = richTextBox1.SelectionStart;
+            var selectionEnd = richTextBox1.SelectionStart + richTextBox1.SelectionLength;
+            for (int i = selectionStart; i < selectionEnd; i++)
+            {
+                richTextBox1.SelectionStart = i;
+                richTextBox1.SelectionLength = 1;
+                richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont, richTextBox1.SelectionFont.Style ^ FontStyle.Underline);
+            }
+            
         }
 
         private void kesToolStripMenuItem_Click(object sender, EventArgs e)
