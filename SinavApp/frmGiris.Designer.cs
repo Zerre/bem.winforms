@@ -72,8 +72,10 @@
             this.lblSinavDosyaYolu.AutoSize = true;
             this.lblSinavDosyaYolu.Location = new System.Drawing.Point(130, 66);
             this.lblSinavDosyaYolu.Name = "lblSinavDosyaYolu";
-            this.lblSinavDosyaYolu.Size = new System.Drawing.Size(0, 13);
+            this.lblSinavDosyaYolu.Size = new System.Drawing.Size(562, 13);
             this.lblSinavDosyaYolu.TabIndex = 5;
+            this.lblSinavDosyaYolu.Text = "C:\\Users\\Sami\\Documents\\Visual Studio 2017\\Projects\\Github Projects\\bem.winforms\\" +
+    "SinavApp\\Sinavlar\\sinav1.txt";
             // 
             // btnDevamEt
             // 

@@ -37,6 +37,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pnlSorular = new System.Windows.Forms.Panel();
             this.btnBasla = new System.Windows.Forms.Button();
+            this.btnBitir = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblSinavAdi
@@ -68,12 +69,11 @@
             // 
             // lblKalanZaman
             // 
-            this.lblKalanZaman.AutoSize = true;
             this.lblKalanZaman.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.lblKalanZaman.ForeColor = System.Drawing.Color.Green;
             this.lblKalanZaman.Location = new System.Drawing.Point(486, 13);
             this.lblKalanZaman.Name = "lblKalanZaman";
-            this.lblKalanZaman.Size = new System.Drawing.Size(87, 31);
+            this.lblKalanZaman.Size = new System.Drawing.Size(139, 31);
             this.lblKalanZaman.TabIndex = 4;
             this.lblKalanZaman.Text = "00:00";
             // 
@@ -101,7 +101,7 @@
             // 
             // btnBasla
             // 
-            this.btnBasla.Location = new System.Drawing.Point(492, 110);
+            this.btnBasla.Location = new System.Drawing.Point(439, 110);
             this.btnBasla.Name = "btnBasla";
             this.btnBasla.Size = new System.Drawing.Size(78, 59);
             this.btnBasla.TabIndex = 6;
@@ -109,11 +109,22 @@
             this.btnBasla.UseVisualStyleBackColor = true;
             this.btnBasla.Click += new System.EventHandler(this.btnBasla_Click);
             // 
+            // btnBitir
+            // 
+            this.btnBitir.Location = new System.Drawing.Point(523, 110);
+            this.btnBitir.Name = "btnBitir";
+            this.btnBitir.Size = new System.Drawing.Size(75, 59);
+            this.btnBitir.TabIndex = 7;
+            this.btnBitir.Text = "BİTİR";
+            this.btnBitir.UseVisualStyleBackColor = true;
+            this.btnBitir.Click += new System.EventHandler(this.btnBitir_Click);
+            // 
             // frmSinavEkrani
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(689, 457);
+            this.Controls.Add(this.btnBitir);
             this.Controls.Add(this.btnBasla);
             this.Controls.Add(this.pnlSorular);
             this.Controls.Add(this.lblAdSoyad);
@@ -137,8 +148,9 @@
         //private CustomPanel pnlSorular;
         private System.Windows.Forms.Label lblKalanZaman;
         public System.Windows.Forms.Label lblAdSoyad;
-        private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Panel pnlSorular;
         private System.Windows.Forms.Button btnBasla;
+        public System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Button btnBitir;
     }
 }
