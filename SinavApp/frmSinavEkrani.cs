@@ -36,7 +36,7 @@ namespace SinavApp
         private void frmSinavEkrani_Load(object sender, EventArgs e)
         {
             int soruSayisi = 0;
-
+            btnBitir.Enabled = false;
             using (var streamReader = new StreamReader(SinavDosyaYolu))
             {
                 lblSinavAdi.Text = streamReader.ReadLine();
@@ -128,25 +128,24 @@ namespace SinavApp
             }
             SinavSüresi = TimeSpan.FromSeconds(SinavSüresi.TotalSeconds - 1);
         }
-        bool baslasinMi = true;
+
         private void btnBasla_Click(object sender, EventArgs e)
         {
-            if (baslasinMi)
-            {
-                timer1.Start();                
-            }
+            btnBasla.Enabled = false;
+            btnBitir.Enabled = true;
+            timer1.Start();
+            SinavBaslaBitir(true);
+        }
+
+        private void SinavBaslaBitir(bool baslaBitir)
+        {
             foreach (Control grpBox in pnlSorular.Controls)
             {
                 foreach (Control radio in grpBox.Controls)
                 {
-                    if (radio is RadioButton && baslasinMi)
+                    if (radio is RadioButton)
                     {
-
-                        radio.Enabled = true;
-                    }
-                    else
-                    {
-                        radio.Enabled = false;
+                        radio.Enabled = baslaBitir;
                     }
                 }
             }
@@ -155,8 +154,9 @@ namespace SinavApp
         private void btnBitir_Click(object sender, EventArgs e)
         {
             timer1.Stop();
-            baslasinMi = false;
-            btnBasla.PerformClick();
+            btnBitir.Enabled = false;
+            SinavBaslaBitir(false);
+
             StringBuilder text = new StringBuilder();
             text.AppendLine(lblSinavAdi.Text);
             foreach (Control grpBox in pnlSorular.Controls)
