@@ -83,44 +83,45 @@ namespace SinavApp
                         {
                             Name = soruSayisi + "soru" + i,
                             Text = soruVeSecenekler[i],
-                            Location = new Point(25, i * lblSoru.Top + lblSoru.Height + 5)
+                            Tag = soruSayisi + "-" + i,
+                        Location = new Point(25, i * lblSoru.Top + lblSoru.Height + 5)
                         };
-                        grpSoru.Controls.Add(rdbSecenek);
-                    }
-                    pnlSorular.Controls.Add(grpSoru);
-                    soruSayisi++;
+                    grpSoru.Controls.Add(rdbSecenek);
                 }
-                prgCevapOrani.Maximum = soruSayisi + 3;
+                pnlSorular.Controls.Add(grpSoru);
+                soruSayisi++;
             }
-            lblKalanZaman.Text = ZamanHesapla(kalanZaman);
-            sonDakikalar = (kalanZaman / 100) * 10;
+            prgCevapOrani.Maximum = soruSayisi + 3;
+        }
+        lblKalanZaman.Text = ZamanHesapla(kalanZaman);
+        sonDakikalar = (kalanZaman / 100) * 10;
             timer1.Start();
         }
 
-        string zamanFormatla(int birim)
-        {
-            return birim < 10 ? "0" + birim : birim + "";
-        }
-        string ZamanHesapla(int zaman)
-        {
-            int saat = zaman / 3600;
-            int dakika = (zaman % 3600) / 60;
-            int saniye = (zaman % 3600) % 60;
+    string zamanFormatla(int birim)
+    {
+        return birim < 10 ? "0" + birim : birim + "";
+    }
+    string ZamanHesapla(int zaman)
+    {
+        int saat = zaman / 3600;
+        int dakika = (zaman % 3600) / 60;
+        int saniye = (zaman % 3600) % 60;
 
-            return zamanFormatla(saat) + ":" + zamanFormatla(dakika) + ":" + zamanFormatla(saniye);
-        }
-        private void timer1_Tick(object sender, EventArgs e)
+        return zamanFormatla(saat) + ":" + zamanFormatla(dakika) + ":" + zamanFormatla(saniye);
+    }
+    private void timer1_Tick(object sender, EventArgs e)
+    {
+        kalanZaman--;
+        lblKalanZaman.Text = ZamanHesapla(kalanZaman);
+        if (kalanZaman <= sonDakikalar)
         {
-            kalanZaman--;
-            lblKalanZaman.Text = ZamanHesapla(kalanZaman);
-            if (kalanZaman <= sonDakikalar)
-            {
-                lblKalanZaman.ForeColor = Color.Red;
-            }
-            if (kalanZaman <= 0)
-            {
-                timer1.Stop();
-            }
+            lblKalanZaman.ForeColor = Color.Red;
+        }
+        if (kalanZaman <= 0)
+        {
+            timer1.Stop();
         }
     }
+}
 }
