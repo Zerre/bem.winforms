@@ -36,7 +36,7 @@ namespace SinavApp
         private void frmSinavEkrani_Load(object sender, EventArgs e)
         {
             int soruSayisi = 0;
-            int solY = 0, sagY = 0;
+
             using (var streamReader = new StreamReader(SinavDosyaYolu))
             {
                 lblSinavAdi.Text = streamReader.ReadLine();
@@ -45,23 +45,25 @@ namespace SinavApp
                 SinavSüresiYüzdeOn = SinavSüresi.TotalSeconds * 0.1;
 
                 string line = "";
-
-                int soruSayisi = 0;
-                int top = -350;
+                
                 int left = 0;
+                int top = 0;
+                int grpSolHeight = 0;
+                int grpSagHeight = 0;
 
                 while (!string.IsNullOrWhiteSpace((line = streamReader.ReadLine())))
                 {
                     soruSayisi++;
                     var items = line.Split('|');
-
-                    top += (soruSayisi % 2 == 1) ? 350 : 0;
+                    
                     left = (soruSayisi % 2 == 1) ? 0 : 286;
+                    top += (soruSayisi % 2 == 1) ? (grpSolHeight >= grpSagHeight) ? grpSolHeight + 15 : grpSagHeight + 15 : 0;
 
                     var groupBox = new GroupBox
                     {
                         Location = new Point(left, top),
-                        Size = new Size(275, 300),
+                        Size = new Size(275, 0),
+                        AutoSize = true,
                         Text = $"{soruSayisi}. Soru"
                     };
 
@@ -73,9 +75,9 @@ namespace SinavApp
                         Location = new Point(15, 15)
                     };
 
-                    int radioTop = lbl.Location.Y+ lbl.PreferredHeight +15;
+                    int radioTop = lbl.Location.Y + lbl.PreferredHeight + 15;
 
-                    for (int i = 1; i < items.Length-1; i++)
+                    for (int i = 1; i < items.Length - 1; i++)
                     {
                         var radio = new RadioButton
                         {
@@ -83,25 +85,34 @@ namespace SinavApp
                             Location = new Point(20, radioTop),
                             Enabled = false,
                             AutoSize = true,
-                            MaximumSize = new Size(200,0)
+                            MaximumSize = new Size(200, 0),
+                            Name = soruSayisi + "rdbCevap" + i,
+                            Tag = soruSayisi + "-" + i,
                         };
+                        radio.CheckedChanged += Radio_CheckedChanged;
 
                         groupBox.Controls.Add(radio);
-
-                        radioTop += 30;
+                        radioTop = radio.Location.Y + radio.PreferredSize.Height + 15;
                     }
 
-                    groupBox.Controls.Add(lbl);
+                    groupBox.Controls.Add(lbl);                    
 
+                    int cehennemdenGelen = (soruSayisi % 2 == 0) ? (grpSagHeight = groupBox.PreferredSize.Height) : (grpSolHeight = groupBox.PreferredSize.Height);
                     pnlSorular.Controls.Add(groupBox);
-
                 };
 
-
+                prgCevapOrani.Maximum = soruSayisi;
                 //timer1.Interval = 1;
             }
+        }
 
-            timer1.Start();
+        private void Radio_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender as RadioButton).Parent.Tag != "Tiklandi")
+            {
+                prgCevapOrani.Value += 1;
+                (sender as RadioButton).Parent.Tag = "Tiklandi";
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -117,6 +128,21 @@ namespace SinavApp
                 lblKalanZaman.ForeColor = Color.Red;
             }
             SinavSüresi = TimeSpan.FromSeconds(SinavSüresi.TotalSeconds - 1);
+        }
+
+        private void btnBasla_Click(object sender, EventArgs e)
+        {
+            timer1.Start();
+            foreach (Control grpBox in pnlSorular.Controls)
+            {
+                foreach (Control radio in grpBox.Controls)
+                {
+                    if (radio is RadioButton)
+                    {
+                        radio.Enabled = true;
+                    }
+                }
+            }
         }
     }
 }
