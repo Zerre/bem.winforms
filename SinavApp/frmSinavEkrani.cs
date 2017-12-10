@@ -173,7 +173,7 @@ namespace SinavApp
                     }
                 }
             }
-            using (var streamWriter = new StreamWriter(@"C:\Users\Sami\Documents\Visual Studio 2017\Projects\Github Projects\bem.winforms\SinavApp\Cevaplar\" + lblAdSoyad.Text + ".txt", true))
+            using (var streamWriter = new StreamWriter(@"C:\Users\Sami\Documents\Visual Studio 2017\Projects\Github Projects\bem.winforms\SinavApp\Cevaplar\" + lblAdSoyad.Text + ".txt", false))
             {
                 streamWriter.Write(text);
             }
