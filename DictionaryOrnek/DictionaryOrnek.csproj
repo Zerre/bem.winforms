@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9C1B68E0-E2D7-447D-925F-D5CFF9787FCD}</ProjectGuid>
+    <ProjectGuid>{7D399E6F-7D85-4EAA-A5C8-634DB69BF1D8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>SinavApp</RootNamespace>
-    <AssemblyName>SinavApp</AssemblyName>
+    <RootNamespace>DictionaryOrnek</RootNamespace>
+    <AssemblyName>DictionaryOrnek</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -45,31 +45,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="frmGiris.cs">
+    <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmGiris.Designer.cs">
-      <DependentUpon>frmGiris.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmSinavEkrani.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmSinavEkrani.Designer.cs">
-      <DependentUpon>frmSinavEkrani.cs</DependentUpon>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SoruGroupBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <EmbeddedResource Include="frmGiris.resx">
-      <DependentUpon>frmGiris.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmSinavEkrani.resx">
-      <DependentUpon>frmSinavEkrani.cs</DependentUpon>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -93,10 +78,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Cevaplar\sinav1-orhan-aygun-001.txt" />
-    <Content Include="Sinavlar\sinav1.txt" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

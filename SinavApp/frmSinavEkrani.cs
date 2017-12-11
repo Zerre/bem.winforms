@@ -17,11 +17,13 @@ namespace SinavApp
         public string SinavDosyaYolu { get; set; }
         public TimeSpan SinavSüresi { get; private set; }
         public double SinavSüresiYüzdeOn { get; private set; }
+        public List<SoruGroupBox> SoruKutulari { get; set; }
+        public Dictionary<int, List<RadioButton>> SoruCevapListesi { get; set; }
 
         public frmSinavEkrani()
         {
             InitializeComponent();
-
+            SoruKutulari = new List<SoruGroupBox>();
             //var frmGiris = this.Owner as frmGiris;
             //this.lblAdSoyad.Text = frmGiris.txtAdSoyad.Text;
         }
@@ -35,152 +37,216 @@ namespace SinavApp
 
         private void frmSinavEkrani_Load(object sender, EventArgs e)
         {
-            int soruSayisi = 0;
-            btnBitir.Enabled = false;
             using (var streamReader = new StreamReader(SinavDosyaYolu))
             {
-                lblSinavAdi.Text = streamReader.ReadLine();
-                lblSinavAciklama.Text = streamReader.ReadLine();
-                SinavSüresi = TimeSpan.FromSeconds(int.Parse(streamReader.ReadLine()));
-                SinavSüresiYüzdeOn = SinavSüresi.TotalSeconds * 0.1;
-
-                string line = "";
-
-                int left = 0;
-                int top = 0;
-                int grpSolHeight = 0;
-                int grpSagHeight = 0;
-
-                while (!string.IsNullOrWhiteSpace((line = streamReader.ReadLine())))
-                {
-                    soruSayisi++;
-                    var items = line.Split('|');
-
-                    left = (soruSayisi % 2 == 1) ? 0 : 286;
-                    top += (soruSayisi % 2 == 1) ? (grpSolHeight >= grpSagHeight) ? grpSolHeight + 15 : grpSagHeight + 15 : 0;
-
-                    var groupBox = new GroupBox
-                    {
-                        Location = new Point(left, top),
-                        Size = new Size(275, 0),
-                        AutoSize = true,
-                        Text = $"{soruSayisi}. Soru"
-                    };
-
-                    var lbl = new Label
-                    {
-                        Text = items[0],
-                        MaximumSize = new Size(260, 0),
-                        AutoSize = true,
-                        Location = new Point(15, 15)
-                    };
-
-                    int radioTop = lbl.Location.Y + lbl.PreferredHeight + 15;
-
-                    for (int i = 1; i < items.Length - 1; i++)
-                    {
-                        var radio = new RadioButton
-                        {
-                            Text = items[i],
-                            Location = new Point(20, radioTop),
-                            Enabled = false,
-                            AutoSize = true,
-                            MaximumSize = new Size(200, 0),
-                            Name = soruSayisi + "rdbCevap" + i,
-                            Tag = (soruSayisi - 1) + "-" + (i - 1)
-                        };
-                        radio.CheckedChanged += Radio_CheckedChanged;
-
-                        groupBox.Controls.Add(radio);
-                        radioTop = radio.Location.Y + radio.PreferredSize.Height + 15;
-                    }
-
-                    groupBox.Controls.Add(lbl);
-
-                    int cehennemdenGelen = (soruSayisi % 2 == 0) ? (grpSagHeight = groupBox.PreferredSize.Height) : (grpSolHeight = groupBox.PreferredSize.Height);
-                    pnlSorular.Controls.Add(groupBox);
-                };
-
-                prgCevapOrani.Maximum = soruSayisi;
+                BaslangicDegerleriniTanimla(streamReader);
+                SoruListesiniOlustur(streamReader);
             }
         }
 
-        private void Radio_CheckedChanged(object sender, EventArgs e)
+        private void SoruListesiniOlustur(StreamReader streamReader)
         {
-            if ((sender as RadioButton).Parent.Tag != "Tiklandi")
+            string line = "";
+
+            int soruSayisi = 0;
+            int top = 0;
+            int left = 0;
+            int enBuyukSatirYuksekligi = 0;
+
+            while (!string.IsNullOrWhiteSpace((line = streamReader.ReadLine())))
             {
-                prgCevapOrani.Value += 1;
-                (sender as RadioButton).Parent.Tag = "Tiklandi";
+                List<RadioButton> buttonList = new List<RadioButton>();
+
+                soruSayisi++;
+                var items = line.Split('|');
+
+                top += (soruSayisi % 2 == 1) ? enBuyukSatirYuksekligi : 0;
+                left = (soruSayisi % 2 == 1) ? 0 : 286;
+
+                var groupBox = new SoruGroupBox
+                {
+                    AutoSize = true,
+                    Location = new Point(left, top),
+                    MinimumSize = new Size(270, 0),
+                    SoruNumarasi = soruSayisi-1,
+                    Text = $"{soruSayisi}. Soru"
+                };
+
+                var lbl = new Label
+                {
+                    Text = items[0],
+                    MaximumSize = new Size(260, 0),
+                    AutoSize = true,
+                    Location = new Point(15, 15)
+                };
+
+                int radioTop = lbl.Location.Y + lbl.PreferredHeight + 15;
+
+                for (int i = 1; i < items.Length - 1; i++)
+                {
+                    var radio = new RadioButton
+                    {
+                        Text = items[i],
+                        Location = new Point(20, radioTop),
+                        Enabled = false,
+                        AutoSize = true,
+                        MaximumSize = new Size(200, 0),
+                        Tag = i-1
+                    };
+                    radio.Click += Radio_Click;
+
+                    groupBox.Controls.Add(radio);
+
+                    radioTop += 30;
+
+                    buttonList.Add(radio);
+                }
+
+                groupBox.Controls.Add(lbl);
+
+                SoruKutulari.Add(groupBox);
+
+                if (soruSayisi % 2 == 1)
+                {
+                    enBuyukSatirYuksekligi = groupBox.PreferredSize.Height;
+                }
+                else
+                {
+                    if (groupBox.PreferredSize.Height > enBuyukSatirYuksekligi)
+                    {
+                        enBuyukSatirYuksekligi = groupBox.PreferredSize.Height;
+                    }
+                }
+
+                //groupBox.Location= new Point(groupBox.Location.X, top+enBuyukSatirYuksekligi);
+
+                pnlSorular.Controls.Add(groupBox);
+
             }
+
+            prgCevapOrani.Maximum = soruSayisi;
+        }
+
+        private void Radio_Click(object sender, EventArgs e)
+        {
+            var radio = sender as RadioButton;
+            var parentGroupBox = radio.Parent as SoruGroupBox;
+
+            if (!parentGroupBox.CevaplandiMi)
+            {
+                prgCevapOrani.Value++;
+                parentGroupBox.CevaplandiMi = true;
+            }
+
+            parentGroupBox.SeciliSecenek = radio;
+        }
+
+        private void BaslangicDegerleriniTanimla(StreamReader streamReader)
+        {
+            lblSinavAdi.Text = streamReader.ReadLine();
+            lblSinavAciklama.Text = streamReader.ReadLine();
+            SinavSüresi = TimeSpan.FromSeconds(int.Parse(streamReader.ReadLine()));
+            SinavSüresiYüzdeOn = SinavSüresi.TotalSeconds * 0.1;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (SinavSüresi.TotalSeconds <= 0)
+            if (SinavSüresi.TotalSeconds == 0)
             {
-                CevaplariKaydet();
-                timer1.Stop();
+                SinaviBitir();
+                return;
             }
+
             this.lblKalanZaman.Text = SinavSüresi.ToString(@"hh\:mm\:ss");
 
             if (SinavSüresi.TotalSeconds <= SinavSüresiYüzdeOn)
             {
                 lblKalanZaman.ForeColor = Color.Red;
             }
+
             SinavSüresi = TimeSpan.FromSeconds(SinavSüresi.TotalSeconds - 1);
         }
 
-        private void btnBasla_Click(object sender, EventArgs e)
+        private void frmSinavEkrani_FormClosed(object sender, FormClosedEventArgs e)
         {
-            btnBasla.Enabled = false;
-            btnBitir.Enabled = true;
-            timer1.Start();
-            SinavBaslaBitir(true);
+            Application.Exit();
         }
 
-        private void SinavBaslaBitir(bool baslaBitir)
+        private void btnBaslat_Click(object sender, EventArgs e)
         {
-            foreach (Control grpBox in pnlSorular.Controls)
-            {
-                foreach (Control radio in grpBox.Controls)
-                {
-                    if (radio is RadioButton)
-                    {
-                        radio.Enabled = baslaBitir;
-                    }
-                }
-            }
+            SecenekleriAktifPasifYap(true);
+            (sender as Button).Enabled = false;
+            timer1.Start();
         }
 
         private void btnBitir_Click(object sender, EventArgs e)
         {
-            timer1.Stop();
-            btnBitir.Enabled = false;
-            SinavBaslaBitir(false);
-            CevaplariKaydet();
+            SinaviBitir();
         }
 
-        private void CevaplariKaydet()
+        private void SinaviBitir()
         {
-            StringBuilder text = new StringBuilder();
-            text.AppendLine(lblSinavAdi.Text);
-            foreach (Control grpBox in pnlSorular.Controls)
+            timer1.Stop();
+            SecenekleriAktifPasifYap(false);
+            btnBitir.Enabled = false;
+
+            string fileName = $"{lblSinavAdi.Text}-{lblAdSoyad.Text}.txt";
+            saveFileDialog1.FileName = fileName;
+            saveFileDialog1.ShowDialog();
+
+            using (var streamWriter = new StreamWriter(saveFileDialog1.FileName, false))
             {
-                foreach (Control radio in grpBox.Controls)
+                streamWriter.WriteLine(lblSinavAdi.Text);
+
+                foreach (var item in SoruKutulari)
                 {
-                    if (radio is RadioButton)
+                    if (item.CevaplandiMi)
                     {
-                        if ((radio as RadioButton).Checked)
-                        {
-                            string[] soruCevap = (radio as RadioButton).Tag.ToString().Split('-');
-                            text.AppendLine(soruCevap[0] + " " + soruCevap[1]);
-                        }
+                        streamWriter.WriteLine($"{item.SoruNumarasi} - {item.SeciliSecenek.Tag}");
                     }
+
+                    //foreach (var radio in item.Value)
+                    //{
+                    //    if (radio.Checked)
+                    //    {
+                    //        streamWriter.WriteLine($"{item.Key} - {radio.Tag}");
+                    //        break;
+                    //    }
+                    //}
                 }
+
+
+                //for (int i = 0; i < pnlSorular.Controls.Count; i++)
+                //{
+                //    var item = pnlSorular.Controls[i];
+
+                //    for (int j = 0; j < item.Controls.Count-1; j++)
+                //    {
+                //        if ((item.Controls[j] as RadioButton).Checked)
+                //        {
+                //            streamWriter.WriteLine($"{i} - {(item.Controls[j] as RadioButton).Tag}");
+                //            break;
+                //        }
+                //    }
+
+                //}
+
             }
-            using (var streamWriter = new StreamWriter(@"C:\Users\Sami\Documents\Visual Studio 2017\Projects\Github Projects\bem.winforms\SinavApp\Cevaplar\" + lblAdSoyad.Text + ".txt", false))
+        }
+
+        private void SecenekleriAktifPasifYap(bool isEnabled)
+        {
+            foreach (var item in SoruKutulari)
             {
-                streamWriter.Write(text);
+                foreach (var item2 in item.Controls)
+                {
+                    if(!(item2 is RadioButton))
+                    {
+                        continue;
+                    }
+
+                    (item2 as RadioButton).Enabled = isEnabled;
+                }
             }
         }
     }
