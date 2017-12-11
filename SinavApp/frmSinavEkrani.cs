@@ -116,8 +116,9 @@ namespace SinavApp
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (SinavSüresi.TotalSeconds == 0)
+            if (SinavSüresi.TotalSeconds <= 0)
             {
+                CevaplariKaydet();
                 timer1.Stop();
             }
             this.lblKalanZaman.Text = SinavSüresi.ToString(@"hh\:mm\:ss");
@@ -156,7 +157,11 @@ namespace SinavApp
             timer1.Stop();
             btnBitir.Enabled = false;
             SinavBaslaBitir(false);
+            CevaplariKaydet();
+        }
 
+        private void CevaplariKaydet()
+        {
             StringBuilder text = new StringBuilder();
             text.AppendLine(lblSinavAdi.Text);
             foreach (Control grpBox in pnlSorular.Controls)
