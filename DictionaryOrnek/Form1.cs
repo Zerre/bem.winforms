@@ -23,11 +23,12 @@ namespace DictionaryOrnek
 
         private void button1_Click(object sender, EventArgs e)
         {
-            switch (comboBox1.SelectedItem.ToString().ToLower())
+            string key = comboBox1.SelectedItem.ToString().ToLower();
+            switch (key)
             {
-                case "button": ButonEkle();break;
-                case "label": LabelEkle();break;
-                case "radio": RadioEkle();break;
+                case "button": OgeEkle<Button>(key, new Button()); break;
+                case "label": OgeEkle<Label>(key, new Label()); break;
+                case "radio": OgeEkle<RadioButton>(key, new RadioButton()); break;
                 default:
                     break;
             }
@@ -69,7 +70,7 @@ namespace DictionaryOrnek
             {
                 Size = new Size(120, 20),
                 Text = (EkliOgeler["button"].Count + 1).ToString(),
-                Location = new Point(20, top+30)
+                Location = new Point(20, top + 30)
             };
 
             EkliOgeler["button"].Add(button);
@@ -98,6 +99,35 @@ namespace DictionaryOrnek
             groupBox2.Controls.Add(label);
         }
 
+        private void OgeEkle<T>(string kontrolKey, T control) where T : Control
+        {
+            if (!EkliOgeler.ContainsKey(kontrolKey))
+            {
+                EkliOgeler.Add(kontrolKey, new List<Control>());
+            }
+
+            int top = (EkliOgeler[kontrolKey].Count > 0) ? EkliOgeler[kontrolKey][EkliOgeler[kontrolKey].Count - 1].Top : -10;
+
+            control.Size = new Size(120, 20);
+            control.Text = (EkliOgeler[kontrolKey].Count + 1).ToString();
+            control.Location = new Point(20, top + 30);
+
+            if (control is Button)
+            {
+                groupBox1.Controls.Add(control);
+            }
+            else if (control is Label)
+            {
+                groupBox2.Controls.Add(control);
+            }
+            else if (control is RadioButton)
+            {
+                groupBox3.Controls.Add(control);
+            }
+
+            EkliOgeler[kontrolKey].Add(control);
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
             var color = new Color();
@@ -106,9 +136,9 @@ namespace DictionaryOrnek
 
             switch (selectedColor)
             {
-                case "kırmızı": color = Color.FromArgb(255, 0, 0);break;
-                case "yeşil": color = Color.FromArgb( 0,255, 0);break;
-                case "mavi": color = Color.FromArgb(0, 0,255);break;
+                case "kırmızı": color = Color.FromArgb(255, 0, 0); break;
+                case "yeşil": color = Color.FromArgb(0, 255, 0); break;
+                case "mavi": color = Color.FromArgb(0, 0, 255); break;
                 default:
                     break;
             }
